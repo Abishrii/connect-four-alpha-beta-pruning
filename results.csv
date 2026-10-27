@@ -1,0 +1,9 @@
+depth,algorithm,best_move_column,score,nodes,leaves,cutoffs,time_seconds
+2,Minimax,4,0,56,49,0,0.002033
+2,Alpha-Beta,4,0,20,13,6,0.000601
+3,Minimax,4,24,399,343,0,0.016241
+3,Alpha-Beta,4,24,81,61,11,0.002512
+4,Minimax,4,2,2800,2401,0,0.120138
+4,Alpha-Beta,4,2,199,122,59,0.006863
+5,Minimax,4,36,19607,16807,0,0.783646
+5,Alpha-Beta,4,36,1281,960,194,0.049048
