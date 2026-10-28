@@ -1,81 +1,95 @@
 # Connect Four AI — Minimax & Alpha-Beta Pruning
 
-A Python implementation of Connect Four using **Minimax and Alpha-Beta Pruning** to demonstrate adversarial search, game-tree evaluation, and search optimization.
+## 1. Project Overview
 
-## Overview
+This project implements an AI-powered Connect Four game in Python. The AI uses **Minimax search, Alpha-Beta Pruning, and heuristic evaluation** to select strategic moves against a human player.
 
-The game uses a **6 × 7 board**. The human plays as `X`, while the AI plays as `O`. The AI evaluates possible moves and selects one based on a heuristic scoring function.
+The project includes a playable graphical interface, a search-tree explorer to understand the AI's decision-making, benchmarking tools to compare search algorithms, and automated tests.
 
-## Algorithms Implemented
+## 2. Technologies Used
 
-- **Minimax:** Explores possible moves using MAX (AI) and MIN (opponent) levels. MAX chooses the highest score, while MIN chooses the lowest.
-- **Alpha-Beta Pruning:** Optimizes Minimax by skipping branches that cannot affect the final decision.
-- **Move Ordering:** Examines centre columns first to improve pruning efficiency.
-- **Depth-Limited Search:** Evaluates positions up to a configurable search depth.
+- **Python** — Game logic, AI algorithms, evaluation, and benchmarking.
+- **Tkinter** — Graphical user interface (GUI).
+- **Minimax** — Explores possible future moves assuming both players make optimal decisions.
+- **Alpha-Beta Pruning** — Reduces unnecessary search by skipping branches that cannot influence the final decision.
+- **Heuristic Evaluation** — Estimates board strength when the search reaches its depth limit.
+- **CSV** — Stores benchmark results.
 
-### Algorithm Flow
+## 3. Project Structure
+
+| File | Purpose |
+|---|---|
+| `connect_four.py` | Core game logic, board management, win/draw detection, heuristic evaluation, Minimax, Alpha-Beta Pruning, AI move selection, and command-line gameplay. |
+| `gui.py` | Provides the graphical interface for playing Connect Four, displaying the board, handling player interactions, and showing game results. |
+| `search_explorer.py` | Explores the AI's search process, showing evaluated and pruned branches and the Alpha-Beta bounds used during decision-making. |
+| `benchmark.py` | Runs experiments to compare Minimax and Alpha-Beta Pruning in terms of search nodes, execution time, and other performance measures. |
+| `results.csv` | Stores benchmark results for analysis and comparison. |
+| `test_connect_four.py` | Contains automated tests for winning conditions, invalid moves, and the correctness and efficiency of the search algorithms. |
+
+## 4. Core Implementation — `connect_four.py`
+
+### Game Logic
+The game uses a **6 × 7 board**. The human player uses `X`, while the AI uses `O`. The implementation manages legal moves, piece placement, win detection in horizontal, vertical, and diagonal directions, and draw detection.
+
+### AI Decision-Making Flow
 
 1. Generate all legal moves.
 2. Simulate each possible move.
-3. Recursively explore future moves using Minimax or Alpha-Beta Pruning.
-4. Evaluate positions using the heuristic function when the depth limit or a terminal state is reached.
-5. Propagate scores upward through the search tree.
-6. Select the move with the highest score for the AI.
+3. Explore future game states using depth-limited Minimax.
+4. Apply Alpha-Beta Pruning to eliminate branches that cannot change the decision.
+5. Evaluate positions at the depth limit using the heuristic function.
+6. Propagate scores through the search tree and select the best move for the AI.
 
-## Heuristic Evaluation Function
+### Heuristic Evaluation
 
-The evaluation function scores potential four-cell winning combinations horizontally, vertically, and diagonally.
+The heuristic evaluates groups of four cells horizontally, vertically, and diagonally.
 
-| Board Pattern | Score |
+| Board pattern | Score |
 |---|---:|
-| Four AI pieces | +100,000 |
-| Three AI pieces + one empty | +120 |
-| Two AI pieces + two empty | +12 |
-| Three human pieces + one empty | -150 |
-| Two human pieces + two empty | -10 |
+| Four AI pieces in a group | +100,000 |
+| Three AI pieces and one empty cell | +120 |
+| Two AI pieces and two empty cells | +12 |
+| Three opponent pieces and one empty cell | -150 |
+| Two opponent pieces and two empty cells | -10 |
 | Other patterns | 0 |
 
-Additional scoring:
+The evaluation also rewards AI pieces in the centre column (`+6` per piece) and penalizes opponent pieces there (`-6` per piece).
 
-- **AI win:** +1,000,000
-- **Human win:** -1,000,000
-- **Draw:** 0
-- **Centre column:** +6 per AI piece and -6 per human piece
+Terminal positions receive much larger scores: **+1,000,000 for an AI win, -1,000,000 for an opponent win, and 0 for a draw**. Positive scores favour the AI, while negative scores favour the opponent.
 
-Positive scores favour the AI; negative scores favour the opponent. Terminal scores take precedence over ordinary heuristic evaluations.
+The stronger penalty for an opponent's three-in-a-row encourages the AI to block immediate threats rather than focus only on its own opportunities.
 
-## Complexity
+### Algorithm Complexity
 
-Let `b` be the branching factor and `d` the search depth.
+- **Minimax:** `O(b^d)` in the worst case.
+- **Alpha-Beta Pruning:** `O(b^d)` in the worst case and approximately `O(b^(d/2))` in the ideal case with effective move ordering.
 
-- **Minimax:** `O(b^d)`
-- **Alpha-Beta Pruning:** Worst case `O(b^d)`; approximately `O(b^(d/2))` under ideal move ordering.
+Here, `b` is the average branching factor and `d` is the search depth.
 
-Alpha-Beta Pruning reduces unnecessary node exploration without changing the Minimax value for the same search depth and evaluation rules.
+## 5. How to Run
 
-## Main File
-
-**`connect_four.py`** contains the core game logic:
-
-- Board creation and legal move generation
-- Piece placement and win/draw detection
-- Heuristic evaluation
-- Minimax and Alpha-Beta Pruning
-- AI move selection
-- Benchmarking and command-line gameplay
-
-## Run
+Run the game from the project directory:
 
 ```bash
 python connect_four.py
 ```
 
-To launch the graphical interface, if included in the repository:
+To launch the graphical interface:
 
 ```bash
 python gui.py
 ```
 
-## Technologies
+Run the benchmark script to compare search performance:
 
-**Python · Minimax · Alpha-Beta Pruning · Heuristic Search**
+```bash
+python benchmark.py
+```
+
+## 6. Key Features
+
+- Interactive Connect Four gameplay.
+- Strategic AI using Minimax and Alpha-Beta Pruning.
+- Heuristic evaluation of potential winning combinations.
+- Search-tree exploration to inspect evaluated and pruned branches.
+- Performance benchmarking and automated tests.
